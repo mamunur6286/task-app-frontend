@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div>
+    <div><pre>{{ formData }}</pre>
         <b-navbar type="dark" variant="dark">
           <div class="container-xl">
             <b-navbar-brand href="#">Assignment App</b-navbar-brand>
@@ -144,25 +144,34 @@ export default {
       let tmpUser = []
       let tmpPost = []
       let tmpComment = []
-      this.datas.comments.forEach(item => {
+      this.datas.comments.forEach(comment => {
         // find user push unique user
-        const user = tmpUser.find(item => item.id === item.user.id)
+        const user = tmpUser.find(item => item.id === comment.user.id)
         if (typeof user === 'undefined') {
-          tmpUser.push(item.user)
+          tmpUser.push(comment.user)
         }
         // find post push unique user
-        const user = tmpPost.find(item => item.id === item.postId)
-        if (typeof user === 'undefined') {
-          tmpPost.push(item.user)
+        const post = tmpPost.find(item => item.id === comment.postId)
+        if (typeof post === 'undefined') {
+          tmpPost.push({
+            id: comment.postId,
+            user_id: comment.user.id
+          })
         }
         // find comments push unique user
-        const user = tmpComment.find(item => item.id === item.id)
-        if (typeof user === 'undefined') {
-          tmpComment.push(item.user)
+        const commentOne = tmpComment.find(item => item.id === comment.id)
+        if (typeof commentOne === 'undefined') {
+          tmpComment.push({
+            id: comment.id,
+            body: comment.body,
+            user_id: comment.user.id
+          })
         }
       })
-
-       const result = await RestApi.postData(baseUrl,'api/v1/comments/store', this.data)
+      this.formData.users = tmpUser
+      this.formData.posts = tmpPost
+      this.formData.comments = tmpComment
+       const result = await RestApi.postData(baseUrl,'api/v1/comments/store', this.formData)
         if (result.success) {
           console.log(true)
         } else {
