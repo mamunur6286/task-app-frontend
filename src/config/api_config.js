@@ -1,5 +1,5 @@
 import axios from 'axios'
-export const baseUrl = 'http://localhost:8000'
+export const baseUrl = 'https://taskapi.itnote.xyz/public/'
 
 export default {
     async execute(baseUrl, method, uri, data, params = {}) {
